@@ -1,0 +1,4 @@
+{
+    "FROM_IMAGE": "quay.io/riotkit/php-app:7.3-x86_64",
+    "URL": "https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz"
+}
