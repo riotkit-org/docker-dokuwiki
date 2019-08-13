@@ -22,4 +22,4 @@ script:
     - make all SLACK_URL=$SLACK_URL
 
 after_failure:
-    - ./notify.sh "${SLACK_URL}" "dokuwiki containers build failure"
+    - ./notify.sh "${SLACK_URL}" "dokuwiki containers build failure "
