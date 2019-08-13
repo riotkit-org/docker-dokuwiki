@@ -3,6 +3,9 @@ SUDO=sudo
 IMG_DH=wolnosciowiec/dokuwiki
 IMG_QUAY=quay.io/riotkit/dokuwiki
 
+help:
+	@grep -E '^[a-zA-Z\-\_0-9\.@]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
 all: ## Build all versions
 	set -xe; \
 	for version in $$(find ./versions -type f -name '*.json'); do \

@@ -26,4 +26,7 @@ envronment variables to configure.
 ```
 # building a stable version
 make build VERSION=stable
+
+# running
+sudo docker run --name wiki --rm -p 80:80 quay.io/riotkit/dokuwiki:stable
 ```
