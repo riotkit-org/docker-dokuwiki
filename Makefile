@@ -50,7 +50,7 @@ build: ## Build a specifc version (VERSION parameter required. Possible values: 
 	${SUDO} docker push ${IMG_DH}:latest; \
 	${SUDO} docker push ${IMG_QUAY}:latest; \
 	\
-	./notify.sh "$SLACK_URL" "[OK] Pushed dokuwiki version: ${VERSION}"
+	./notify.sh "$SLACK_URL" "[OK] Pushed dokuwiki version: ${tag}"
 
 
 clean: ## Clean up build files
