@@ -13,9 +13,12 @@ ENV NGINX_ENABLE_DEFAULT_LOCATION_INDEX=false \
     WWW_GROUP_ID=1000 \
     DOKUWIKI_VERSION={{ VERSION }}
 
-ADD ./application.tar.gz /var/www/html/
+ADD application.tar.gz /var/www/html/
+ADD entrypoint.d/* /entrypoint.d/
+
 RUN cd /var/www/html \
     && mv ./*dokuwiki-*/* ./ \
+    && chown www-data:www-data /var/www/html \
     && test -f index.php \
     && test -f doku.php \
     && test -d data
