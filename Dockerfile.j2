@@ -14,4 +14,10 @@ ENV NGINX_ENABLE_DEFAULT_LOCATION_INDEX=false \
     DOKUWIKI_VERSION={{ VERSION }}
 
 ADD ./application.tar.gz /var/www/html/
+RUN cd /var/www/html \
+    && mv ./*dokuwiki-*/* ./ \
+    && test -f index.php \
+    && test -f doku.php \
+    && test -d data
+
 COPY etc/nginx/conf.d/* /.etc.template/nginx/conf.d/
