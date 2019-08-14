@@ -1,4 +1,5 @@
 
+SHELL=/bin/bash
 SUDO=sudo
 IMG_DH=wolnosciowiec/dokuwiki
 IMG_QUAY=quay.io/riotkit/dokuwiki
