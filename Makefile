@@ -30,8 +30,7 @@ build: ## Build a specifc version (VERSION parameter required. Possible values: 
 	real_version=$${real_version/\//}; \
 	tag=${VERSION}-$${real_version}; \
 	\
-	VERSION=$$tag FROM_IMAGE=$$from j2 ./Dockerfile.j2 > ./Dockerfile; \
-	${SUDO} docker build . -f ./Dockerfile -t ${IMG_DH}:$${tag}; \
+	${SUDO} docker build . -f ./Dockerfile --build-arg VERSION=$$tag --build-arg FROM_IMAGE=$$from -t ${IMG_DH}:$${tag}; \
 	${SUDO} docker tag ${IMG_DH}:$${tag} ${IMG_QUAY}:$${tag}; \
 	\
 	${SUDO} docker tag ${IMG_DH}:$${tag} ${IMG_DH}:${VERSION}; \
@@ -53,7 +52,7 @@ build: ## Build a specifc version (VERSION parameter required. Possible values: 
 		${SUDO} docker push ${IMG_QUAY}:latest; \
 	fi; \
 	\
-	./notify.sh "$SLACK_URL" "[OK] built dokuwiki version: $${tag}"
+	./notify.sh "${SLACK_URL}" "[OK] built dokuwiki version: $${tag}"
 
 
 clean: ## Clean up build files

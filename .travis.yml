@@ -4,23 +4,31 @@ services:
     - docker
 
 before_script:
-    # multiarch builds
-    - docker --version  # document the version Travis is using (currently 17.x, which is way too old)
-    - echo '{"experimental":true}' | sudo tee /etc/docker/daemon.json # try to use manifests
-    - mkdir -p $HOME/.docker
-    - echo '{"experimental":"enabled"}' | tee $HOME/.docker/config.json # needed to use docker manifest
-    - sudo service docker restart
-    - sudo docker run --rm --privileged multiarch/qemu-user-static:register --reset
-
     # dependencies
-    - sudo pip install j2cli
+    - pip install j2cli requests
+    - wget https://github.com/riotkit-org/ci-utils/archive/v2.0.0.zip -O /tmp/ci-utils.zip
+    - curl "https://raw.githubusercontent.com/riotkit-org/ci-utils/master/ci-integration/travis.sh" -s | bash
+
+    # activate ARM builds on travis
+    - /opt/riotkit/utils/bin/setup-travis-arm-builds
 
     # authorization
     - echo "$DOCKER_PASSWORD" | sudo docker login -u "$DOCKER_USERNAME" --password-stdin
     - echo "$QUAY_PASSWORD" | sudo docker login -u "$QUAY_USERNAME" --password-stdin quay.io
 
-script:
-    - make all SLACK_URL=$SLACK_URL
-
 after_failure:
     - ./notify.sh "${SLACK_URL}" "dokuwiki containers build failure "
+
+jobs:
+    include:
+        - stage: Build stable
+          script:
+              - make build clean VERSION=stable
+
+        - stage: Build old stable
+          script:
+              - make build clean VERSION=old-stable
+
+        - stage: Build snapshot
+          script:
+              - make build clean VERSION=snapshot

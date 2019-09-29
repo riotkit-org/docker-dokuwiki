@@ -27,6 +27,42 @@ The image is built with superpower of RiotKit's PHP image. See
 [php-app](https://github.com/riotkit-org/docker-php-app) for available
 envronment variables to configure.
 
+**Running:**
+
+1. Run the container
+
+```bash
+# run one of stable versions
+sudo docker run \
+  --name dokuwiki \
+  -v $(pwd)/data:/var/www/html/data \
+  -v $(pwd)/lib:/var/www/html/lib \
+  -v $(pwd)/conf:/var/www/html/conf \
+  -p 80:80 \
+  -e DOKUWIKI_INSTALL=true \
+  quay.io/riotkit/dokuwiki:stable-2018-04-22b
+```
+
+See the list of all versions there: https://quay.io/repository/riotkit/dokuwiki?tab=tags
+Each stable, oldstable and development version has a snapshot if you do not like using just `stable` tag, as it is rebuilded on each release.
+
+2. After the container started, navigate to the http://localhost/install.php to setup superuser account and WIKI settings.
+
+3. Remove the container and recreate with installer deactivated
+
+```
+sudo docker rm -f dokuwiki
+
+sudo docker run \
+  --name dokuwiki \
+  -v $(pwd)/data:/var/www/html/data \
+  -v $(pwd)/lib:/var/www/html/lib \
+  -v $(pwd)/conf:/var/www/html/conf \
+  -p 80:80 \
+  -e DOKUWIKI_INSTALL=true \
+  quay.io/riotkit/dokuwiki:stable-2018-04-22b
+```
+
 ## Extending
 
 Please put your files and JINJA2 templates into the container with
@@ -51,15 +87,11 @@ sudo docker run --name wiki --rm -p 80:80 quay.io/riotkit/dokuwiki:stable
 
 ## How does the image building work?
 
-Dockerfile is generated from a template `Dockerfile.j2`, it's a JINJA2
-template (mostly used standard by DevOps around the world). 
-
-The variables required for rendering of the `Dockerfile.j2` are in
-`versions` directory. 
+The variables required for building of the `Dockerfile` are in
+`versions` directory. All variables are passed by Makefile with `--build-args`
 
 `Makefile` is listing all versions, and going through them. For each
-version it is rendering a `Dockerfile.j2` into a `Dockerfile` and
-executing a `docker build`, next `docker tag` and `docker push`.
+version it is executing a `docker build`, next `docker tag` and `docker push`.
 
 **What about configuration files, huh?**
 
